@@ -45,8 +45,6 @@ asignación (=) */
 
 /**====================== Rules ========================**/
 
-%%
-
 /* Cada una de las palabras reservadas y comandos de las instrucciones debe mostrarse en mayúscula */
 
 /* Los identificadores deben ir numerados. En caso de encontrar uno repetido debe tener la misma numeración en cada aparición. Al terminar el análisis léxico se deben mostrar cuántos y cuáles fueron los identificadores encontrados */
@@ -59,6 +57,8 @@ asignación (=) */
 - Un token no especificado en la gramática debe indicar error en el lugar donde fue encontrado.
 - Un error en la estructura de la instrucción no es un error léxico
 */
+
+%%
 %%
 
 /**=================== CODE SECTION ===================**/
