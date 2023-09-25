@@ -1,19 +1,59 @@
 
 /**=================== Definitions ===================**/
 %{
+    #include <stdio.h>
+    #include <ctype.h>
+
     int num_errors = 0;
 %}
 
 /** GRAMATICA **/
-/* Comandos:
-- Creación y eliminación (CREATE TABLE, DROP TABLE)
-- Busqueda (SELECT, WHERE, GROUP BY, ORDER BY)
-- Manipulación (INSERT, DELETE, UPDATE)
-- Funciones (MAX, MIN, AVG, COUNT)
-- Palabras reservadas (INTO, VALUES, FROM, SET, ASC, DESC)
-*/
+
+WS " "
+
+/*----- COMANDOS -------*/
+COMMAND {CREATE}|{DROP}|{SEARCH}|{MANIPULATION}|{FUNCTION}|{RESERVED}
+
+/* Creación y eliminación (CREATE TABLE, DROP TABLE) */
+TABLE [tT][aA][bB][lL][eE]
+CREATE [cC][rR][eE][aA][tT][eE]{WS}{TABLE}
+DROP [dD][rR][oO][pP]{WS}{TABLE}
+
+/* Busqueda (SELECT, WHERE, GROUP BY, ORDER BY) */
+SEARCH {SELECT}|{WHERE}|{GROUP}" "{BY}|{ORDER}" "{BY}
+SELECT [sS][eE][lL][eE][cC][tT] 
+WHERE [wW][hH][eE][rR][eE]
+BY [bB][yY]
+GROUP [gG][rR][oO][uU][pP]
+ORDER [oO][rR][dD][eE][rR]
+
+/* Manipulación (INSERT, DELETE, UPDATE)*/
+MANIPULATION {INSERT}|{DELETE}|{UPDATE}
+INSERT [iI][nN][sS][eE][rR][tT]
+DELETE [dD][eE][lL][eE][tT][eE]
+UPDATE [uU][pP][dD][aA][tT][eE]
+
+/* Funciones (MAX, MIN, AVG, COUNT) */
+FUNCTION {MAX}|{MIN}|{AVG}|{COUNT}
+MAX [mM][aA][xX]
+MIN [mM][iI][nN]
+AVG [aA][vV][gG]
+COUNT [cC][oO][uU][nN][tT]  
+
+/* Palabras reservadas (INTO, VALUES, FROM, SET, ASC, DESC) */
+RESERVED {INTO}|{VALUES}|{FROM}|{SET}|{ASC}|{DESC}
+INTO [iI][nN][tT][oO]
+VALUES [vV][aA][lL][uU][eE][sS]
+FROM [fF][rR][oO][mM]
+SET [sS][eE][tT]
+ASC [aA][sS][cC]
+DESC [dD][eE][sS][cC]
 
 /* Tipos de datos: INTEGER, DECIMAL, VARCHAR... */
+TYPE {INTEGER}|{DECIMAL}|{VARCHAR}
+INTEGER [iI][nN][tT][eE][gG][eE][rR] 
+DECIMAL [dD][eE][cC][iI][mM][aA][lL] 
+VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 
 /* Operadores: 
 - aritmeticos: suma (+), resta (-), multiplicación (*), división (/)
@@ -28,7 +68,7 @@ asignación (=) */
 
 /* Números: entero o decimal */
 
-/* Cadenas: entre comillas (no son variables o indetificadores) */
+/* Cadenas: entre comillas ’ (no son variables o indetificadores) */
 
 /* Identificadores: Nombres de tablas y columnas */
 
@@ -59,11 +99,20 @@ asignación (=) */
 */
 
 %%
+{COMMAND}|{TYPE} {
+    // Handle commands and types to uppercase
+    for (int i = 0; yytext[i]; i++) {
+        yytext[i] = toupper(yytext[i]);
+    }
+
+    printf("%s", yytext);
+}
+. {printf(" ");}
 %%
 
 /**=================== CODE SECTION ===================**/
 
-int yywrap(){}
+int yywrap(){return 1;}
 
 int main( int argc, char **argv )
     {

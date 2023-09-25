@@ -1,0 +1,6 @@
+CREATE TABLE                 VARCHAR              INTEGER          DECIMAL      INSERT INTO          VALUES                           
+SELECT FROM   
+SELECT COUNT   FROM       
+SELECT         MAX          FROM          
+UPDATE SET                 FROM          WHERE              
+SELECT   FROM          WHERE                 ORDER BY        ASC    
