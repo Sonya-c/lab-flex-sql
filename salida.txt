@@ -1,6 +1,18 @@
-CREATE TABLE                 VARCHAR              INTEGER          DECIMAL      INSERT INTO          VALUES                           
-SELECT FROM   
-SELECT COUNT   FROM       
-SELECT         MAX          FROM          
-UPDATE SET                 FROM          WHERE              
-SELECT   FROM          WHERE                 ORDER BY        ASC    
+CREATE TABLE  id1=Empleado id2=nombre VARCHAR       id3=cédula INTEGER   id4=salario DECIMAL      
+INSERT  INTO  id1=Empleado VALUES  cadena='Juan'             ERROR: 12aab   
+SELECT  FROM  id5=a 
+SELECT  COUNT    FROM  id6=tabla 
+SELECT  id2=nombre  MAX  id4=salario  FROM  id1=Empleado 
+UPDATE  SET  id2=nombre cadena='Carlos' FROM  id1=Empleado WHERE  id3=cédula      
+SELECT    FROM  id1=Empleado WHERE  id4=salario         ORDER BY  id2=nombre ASC     
+
+
+6 Identificadores
+id1=Empleado
+id2=nombre
+id3=cédula
+id4=salario
+id5=a
+id6=tabla
+
+1 Errores lexicos

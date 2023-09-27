@@ -3,8 +3,35 @@
 %{
     #include <stdio.h>
     #include <ctype.h>
+    #include <iostream>
+    #include <vector>
+    #include <string>
+    
+    using namespace std;
+
+    vector<string> identifiers;
 
     int num_errors = 0;
+
+    char* toUpper(char* str) {
+        for (int i = 0; str[i]; i++) {
+            str[i] = toupper(str[i]);
+        }
+        return str;
+    }
+
+    int search_id(string id) {
+        for (int i = 0; i < identifiers.size(); i++) {
+            if (identifiers.at(i) == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    void add_id(string id) {
+        identifiers.insert(identifiers.end(), id);
+    }
 %}
 
 /** GRAMATICA **/
@@ -50,10 +77,10 @@ ASC [aA][sS][cC]
 DESC [dD][eE][sS][cC]
 
 /* Tipos de datos: INTEGER, DECIMAL, VARCHAR... */
-TYPE {INTEGER}|{DECIMAL}|{VARCHAR}
-INTEGER [iI][nN][tT][eE][gG][eE][rR] 
-DECIMAL [dD][eE][cC][iI][mM][aA][lL] 
-VARCHAR [vV][aA][rR][cC][hH][aA][rR]
+TYPE {TYPE_INTEGER}|{TYPE_DECIMAL}|{TYPE_VARCHAR}
+TYPE_INTEGER [iI][nN][tT][eE][gG][eE][rR] 
+TYPE_DECIMAL [dD][eE][cC][iI][mM][aA][lL] 
+TYPE_VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 
 /* Operadores: 
 - aritmeticos: suma (+), resta (-), multiplicación (*), división (/)
@@ -69,44 +96,38 @@ asignación (=) */
 /* Números: entero o decimal */
 
 /* Cadenas: entre comillas ’ (no son variables o indetificadores) */
+STRING \'[^\']*\'|\"[^\"]*\"
 
 /* Identificadores: Nombres de tablas y columnas */
+ACCENT [áéíóúÁÉÍÓÚñÑ]
+DIGIT [0-9]
+ALPHA [a-zA-Z]|{ACCENT}
+ID {ALPHA}({ALPHA}|{DIGIT})*
 
-
-/** ESTRUCTURAS **/
-
-/* Creación o eliminación de tablas */
-
-/* Inserción, Eliminación, Actualización*/
-
-/* Búsqueda básica, con funciones y combinada */
-
-/* Búsquedas Condicionadas, agrupadas y ordenadas */
-
-/**====================== Rules ========================**/
-
-/* Cada una de las palabras reservadas y comandos de las instrucciones debe mostrarse en mayúscula */
-
-/* Los identificadores deben ir numerados. En caso de encontrar uno repetido debe tener la misma numeración en cada aparición. Al terminar el análisis léxico se deben mostrar cuántos y cuáles fueron los identificadores encontrados */
-
-/* Para los números, operadores y separadores se debe especificar el tipo de token encontrado */
-
-/*Para los números identificar si son enteros o decimales*/
-
-/* Errores léxicos
-- Un token no especificado en la gramática debe indicar error en el lugar donde fue encontrado.
-- Un error en la estructura de la instrucción no es un error léxico
-*/
+ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 %%
 {COMMAND}|{TYPE} {
-    // Handle commands and types to uppercase
-    for (int i = 0; yytext[i]; i++) {
-        yytext[i] = toupper(yytext[i]);
-    }
-
-    printf("%s", yytext);
+    printf("%s ", toUpper(yytext));
 }
+
+{ERROR} {
+    printf("ERROR: %s ", yytext);
+    num_errors++;
+}
+
+{ID} {
+    int index = search_id(yytext);
+
+    if (index == -1) {
+        add_id(yytext);
+        index = search_id(yytext);
+    }
+    printf("id%d=%s", index + 1, yytext);
+}
+
+{STRING} {printf("cadena=%s", yytext);}
+
 . {printf(" ");}
 %%
 
@@ -121,5 +142,15 @@ int main( int argc, char **argv )
         yyin = fopen( argv[0], "r" );
     else
         yyin = stdin;
+
     yylex();
+
+    printf("\n\n\n");
+    printf("%zu Identificadores\n", identifiers.size());
+
+    for (int i = 0; i < identifiers.size(); i++) {
+        printf("id%d=%s\n", i + 1, identifiers.at(i).c_str());
+    }
+
+    printf("\n%d Errores lexicos", num_errors);
 }
