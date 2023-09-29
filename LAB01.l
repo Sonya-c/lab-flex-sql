@@ -89,8 +89,14 @@ TYPE_VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 */
 
 /* Separadores: Paréntesis que abre ( ( ), paréntesis que cierra( ) ), coma (,), punto y coma (;), asignación (=) */
+PARAOPEN "("
+PARACLOSE ")"
+COMMAN ","
+SEMICOLON ";"
+ASIG "="
 
 /* Caracteres especiales: asterisco (*) */
+AST "*"
 
 /* Identificadores: Nombres de tablas y columnas */
 DIGIT [0-9]
@@ -108,6 +114,8 @@ STRING \'[^\']*\'|\"[^\"]*\"
 ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 %%
+{WS}+ {printf(" ");}
+
 {COMMAND}|{TYPE} {
     printf("%s", toUpper(yytext));
 }
@@ -127,12 +135,20 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
     printf("id%d=%s", index + 1, yytext);
 }
 
+{PARAOPEN} {printf(" parabre=%s ", yytext);}
+{PARACLOSE} {printf(" parcierr=%s ", yytext);}
+{COMMAN} {printf(" coma=%s", yytext);}
+{SEMICOLON} {printf(" puntcoma=%s", yytext);}
+{ASIG} {printf(" asign=%s ", yytext);}
+
 {STRING} {printf("cadena=%s", yytext);}
 
 {INTEGER} {printf("entero=%s", yytext);}
 {DECIMAL} {printf("decimal=%s", yytext);}
 
-. {printf(" ");}
+{AST} {printf("asterisco=%s", yytext);}
+
+. {printf("",yytext);}
 %%
 
 /**=================== CODE SECTION ===================**/
