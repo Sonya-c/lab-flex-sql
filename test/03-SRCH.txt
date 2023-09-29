@@ -1,0 +1,4 @@
+SELECT *|identificador[,identificador,…] FROM identificador ;
+✓ SELECT Función(identificador) FROM identificador ;
+✓ SELECT Función(identificador)|identificador[,Función(identificador)|identificador,…] ] FROM
+identificador ;

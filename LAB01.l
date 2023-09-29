@@ -39,12 +39,12 @@
 WS " "
 
 /*----- COMANDOS -------*/
-COMMAND {CREATE}|{DROP}|{SEARCH}|{MANIPULATION}|{FUNCTION}|{RESERVED}
+COMMAND {CREATE}|{DROP}|{SEARCH}|{MANIPULATION}|{FUNCTION}|{RESERVED}|{TABLE}
 
 /* Creación y eliminación (CREATE TABLE, DROP TABLE) */
 TABLE [tT][aA][bB][lL][eE]
-CREATE [cC][rR][eE][aA][tT][eE]{WS}{TABLE}
-DROP [dD][rR][oO][pP]{WS}{TABLE}
+CREATE [cC][rR][eE][aA][tT][eE]
+DROP [dD][rR][oO][pP]
 
 /* Busqueda (SELECT, WHERE, GROUP BY, ORDER BY) */
 SEARCH {SELECT}|{WHERE}|{GROUP}" "{BY}|{ORDER}" "{BY}
@@ -87,6 +87,18 @@ TYPE_VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 - relacionales: igualdad (=), diferencia (<>), mayor que (>), menor que (<), mayor o igual que (>=), menor o igual que (<=)
 - logicos: conjunción (AND) y disyunción (OR)
 */
+OP_ADD "+"
+OP_SUB "-"
+OP_MULT "*"
+OP_DIV "/"
+OP_EQ "=="
+OP_DIFF "<>"
+OP_GT ">"
+OP_LT "<"
+OP_GE ">="
+OP_LE "<="
+OP_AND [aA][nN][dD]
+OP_OR [oO][rR]
 
 /* Separadores: Paréntesis que abre ( ( ), paréntesis que cierra( ) ), coma (,), punto y coma (;), asignación (=) */
 PARAOPEN "("
@@ -105,6 +117,7 @@ ALPHA [a-zA-Z]|{ACCENT}
 ID {ALPHA}({ALPHA}|{DIGIT})*
 
 /* Números: entero o decimal */
+NUM {INTEGER}|{DECIMAL}
 INTEGER {DIGIT}+
 DECIMAL {INTEGER}.{INTEGER}
 
@@ -119,6 +132,27 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 {COMMAND}|{TYPE} {
     printf("%s", toUpper(yytext));
 }
+
+{OP_ADD} {printf(" suma=%s ", yytext);}
+{OP_SUB} {printf(" resta=%s ", yytext);}
+{OP_MULT} {printf(" mult=%s ", yytext);}
+{OP_DIV} {printf(" div=%s ", yytext);}
+{OP_EQ} {printf(" igual=%s ", yytext);}
+{OP_DIFF} {printf(" dife=%s ", yytext);}
+{OP_GT} {printf(" mayorq=%s ", yytext);}
+{OP_LT} {printf(" menorq=%s ", yytext);}
+{OP_GE} {printf(" mayoriq=%s ", yytext);}
+{OP_LE} {printf(" menoriq=%s ", yytext);}
+{OP_AND} {printf(" y=%s ", yytext);}
+{OP_OR} {printf(" o=%s ", yytext);}
+
+{PARAOPEN} {printf(" parabre=%s ", yytext);}
+{PARACLOSE} {printf(" parcierr=%s ", yytext);}
+{COMMAN} {printf(" coma=%s", yytext);}
+{SEMICOLON} {printf(" puntcoma=%s", yytext);}
+{ASIG} {printf(" asign=%s ", yytext);}
+
+[^({NUM}|{PARACLOSE})]{AST}[^({NUM}|{PARAOPEN})] {printf(" asterisco=%s", yytext);}
 
 {ERROR} {
     printf("ERROR: %s ", yytext);
@@ -135,20 +169,16 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
     printf("id%d=%s", index + 1, yytext);
 }
 
-{PARAOPEN} {printf(" parabre=%s ", yytext);}
-{PARACLOSE} {printf(" parcierr=%s ", yytext);}
-{COMMAN} {printf(" coma=%s", yytext);}
-{SEMICOLON} {printf(" puntcoma=%s", yytext);}
-{ASIG} {printf(" asign=%s ", yytext);}
-
 {STRING} {printf("cadena=%s", yytext);}
 
 {INTEGER} {printf("entero=%s", yytext);}
 {DECIMAL} {printf("decimal=%s", yytext);}
 
-{AST} {printf("asterisco=%s", yytext);}
 
-. {printf("",yytext);}
+. {
+    printf("ERROR: %s ", yytext);
+    num_errors++;
+}
 %%
 
 /**=================== CODE SECTION ===================**/
@@ -172,5 +202,5 @@ int main( int argc, char **argv )
         printf("id%d=%s\n", i + 1, identifiers.at(i).c_str());
     }
 
-    printf("\n%d Errores lexicos", num_errors);
+    printf("\n%d Errores lexicos\n", num_errors);
 }

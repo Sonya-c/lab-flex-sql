@@ -1,0 +1,3 @@
+INSERT INTO identificador[identificador …] VALUES(identificador [, identificador …]);
+DELETE FROM identificador WHERE condición [AND condición, OR condición, …];
+UPDATE identificador SET identificador=identificador|número WHERE condición [AND condición, OR condición, …];

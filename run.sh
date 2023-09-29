@@ -13,4 +13,3 @@ g++ -std=c++11 -o LAB01.out LAB01.yy.cpp -lfl
 ./LAB01.out entrada.txt > salida.txt
 
 cat salida.txt
-echo "\n"

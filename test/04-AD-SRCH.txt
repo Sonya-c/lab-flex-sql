@@ -1,0 +1,8 @@
+✓ SELECT *|identificador[,identificador,…] FROM identificador WHERE condición [AND condición,
+OR condición, …];
+✓ SELECT *|identificador[,identificador,…] FROM identificador GROUP BY identificador;
+✓ SELECT *|identificador[,identificador,…] FROM identificador ORDER BY
+identificador[,identificador, …]] ASC|DESC;
+✓ SELECT *|identificador[,identificador,…] FROM identificador [WHERE condición [AND condición,
+OR condición, …]][GROUP BY identificador] [ORDER BY identificador[,identificador, …]]
+ASC|DESC];
