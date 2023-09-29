@@ -47,7 +47,7 @@ CREATE [cC][rR][eE][aA][tT][eE]
 DROP [dD][rR][oO][pP]
 
 /* Busqueda (SELECT, WHERE, GROUP BY, ORDER BY) */
-SEARCH {SELECT}|{WHERE}|{GROUP}" "{BY}|{ORDER}" "{BY}
+SEARCH {SELECT}|{WHERE}|{GROUP}|{BY}|{ORDER}
 SELECT [sS][eE][lL][eE][cC][tT] 
 WHERE [wW][hH][eE][rR][eE]
 BY [bB][yY]
@@ -114,17 +114,16 @@ AST "*"
 DIGIT [0-9]
 ACCENT [áéíóúÁÉÍÓÚñÑ]
 ALPHA [a-zA-Z]|{ACCENT}
-ID {ALPHA}({ALPHA}|{DIGIT})*
+ID [^0-9\"\']{ALPHA}({ALPHA}|{DIGIT})*
 
 /* Números: entero o decimal */
-NUM {INTEGER}|{DECIMAL}
 INTEGER {DIGIT}+
-DECIMAL {INTEGER}.{INTEGER}
+DECIMAL ({INTEGER}\.{INTEGER})
 
 /* Cadenas: entre comillas ’ (no son variables o indetificadores) */
 STRING \'[^\']*\'|\"[^\"]*\"
 
-ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
+ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*|{DECIMAL}+({DIGIT}|{ALPHA})+
 
 %%
 {WS}+ {printf(" ");}
@@ -133,11 +132,14 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
     printf("%s", toUpper(yytext));
 }
 
+[^0-9)]{AST}[^0-9(] {printf(" asterisco=%s", yytext);}
+
+
 {OP_ADD} {printf(" suma=%s ", yytext);}
 {OP_SUB} {printf(" resta=%s ", yytext);}
 {OP_MULT} {printf(" mult=%s ", yytext);}
 {OP_DIV} {printf(" div=%s ", yytext);}
-{OP_EQ} {printf(" igual=%s ", yytext);}
+{OP_EQ} {printf(" igual= %s ", yytext);}
 {OP_DIFF} {printf(" dife=%s ", yytext);}
 {OP_GT} {printf(" mayorq=%s ", yytext);}
 {OP_LT} {printf(" menorq=%s ", yytext);}
@@ -150,14 +152,15 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 {PARACLOSE} {printf(" parcierr=%s ", yytext);}
 {COMMAN} {printf(" coma=%s", yytext);}
 {SEMICOLON} {printf(" puntcoma=%s", yytext);}
-{ASIG} {printf(" asign=%s ", yytext);}
+{ASIG} {printf(" asign= %s ", yytext);}
 
-[^({NUM}|{PARACLOSE})]{AST}[^({NUM}|{PARAOPEN})] {printf(" asterisco=%s", yytext);}
 
 {ERROR} {
     printf("ERROR: %s ", yytext);
     num_errors++;
 }
+
+{STRING} {printf("cadena=%s", yytext);}
 
 {ID} {
     int index = search_id(yytext);
@@ -169,10 +172,8 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
     printf("id%d=%s", index + 1, yytext);
 }
 
-{STRING} {printf("cadena=%s", yytext);}
-
-{INTEGER} {printf("entero=%s", yytext);}
 {DECIMAL} {printf("decimal=%s", yytext);}
+{INTEGER} {printf("entero=%s", yytext);}
 
 
 . {

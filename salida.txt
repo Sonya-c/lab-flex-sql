@@ -1,11 +1,7 @@
-CREATE id1=tabla1 parabre=( id2=var1 VARCHAR parabre=( entero=20 parcierr=)  coma=, id3=var2 INTEGER coma=, id4=var3 DECIMAL parabre=( entero=2 parcierr=)  parcierr=) 
-DROP TABLE id1=tabla1 puntcoma=;
+ERROR: " id1=hola cadena='hola'
 
 
-4 Identificadores
-id1=tabla1
-id2=var1
-id3=var2
-id4=var3
+1 Identificadores
+id1=hola
 
-0 Errores lexicos
+1 Errores lexicos
