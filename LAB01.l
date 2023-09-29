@@ -88,27 +88,28 @@ TYPE_VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 - logicos: conjunción (AND) y disyunción (OR)
 */
 
-/* Separadores: Paréntesis que abre ( ( ), paréntesis que cierra( ) ), coma (,), punto y coma (;),
-asignación (=) */
+/* Separadores: Paréntesis que abre ( ( ), paréntesis que cierra( ) ), coma (,), punto y coma (;), asignación (=) */
 
 /* Caracteres especiales: asterisco (*) */
 
+/* Identificadores: Nombres de tablas y columnas */
+DIGIT [0-9]
+ACCENT [áéíóúÁÉÍÓÚñÑ]
+ALPHA [a-zA-Z]|{ACCENT}
+ID {ALPHA}({ALPHA}|{DIGIT})*
+
 /* Números: entero o decimal */
+INTEGER {DIGIT}+
+DECIMAL {INTEGER}.{INTEGER}
 
 /* Cadenas: entre comillas ’ (no son variables o indetificadores) */
 STRING \'[^\']*\'|\"[^\"]*\"
-
-/* Identificadores: Nombres de tablas y columnas */
-ACCENT [áéíóúÁÉÍÓÚñÑ]
-DIGIT [0-9]
-ALPHA [a-zA-Z]|{ACCENT}
-ID {ALPHA}({ALPHA}|{DIGIT})*
 
 ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 %%
 {COMMAND}|{TYPE} {
-    printf("%s ", toUpper(yytext));
+    printf("%s", toUpper(yytext));
 }
 
 {ERROR} {
@@ -127,6 +128,9 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 }
 
 {STRING} {printf("cadena=%s", yytext);}
+
+{INTEGER} {printf("entero=%s", yytext);}
+{DECIMAL} {printf("decimal=%s", yytext);}
 
 . {printf(" ");}
 %%

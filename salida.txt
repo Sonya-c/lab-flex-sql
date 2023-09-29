@@ -1,10 +1,10 @@
-CREATE TABLE  id1=Empleado id2=nombre VARCHAR       id3=cédula INTEGER   id4=salario DECIMAL      
-INSERT  INTO  id1=Empleado VALUES  cadena='Juan'             ERROR: 12aab   
-SELECT  FROM  id5=a 
-SELECT  COUNT    FROM  id6=tabla 
-SELECT  id2=nombre  MAX  id4=salario  FROM  id1=Empleado 
-UPDATE  SET  id2=nombre cadena='Carlos' FROM  id1=Empleado WHERE  id3=cédula      
-SELECT    FROM  id1=Empleado WHERE  id4=salario         ORDER BY  id2=nombre ASC     
+CREATE TABLE id1=Empleado id2=nombre VARCHAR entero=20   id3=cédula INTEGER  id4=salario DECIMAL entero=2   
+INSERT INTO id1=Empleado VALUES cadena='Juan' entero=1045268154  ERROR: 12aab   
+SELECT FROM id5=a 
+SELECT COUNT   FROM id6=tabla 
+SELECT id2=nombre  MAX id4=salario  FROM id1=Empleado 
+UPDATE SET id2=nombre cadena='Carlos' FROM id1=Empleado WHERE id3=cédula decimal=12.5 
+SELECT   FROM id1=Empleado WHERE id4=salario entero=2000000 ORDER BY id2=nombre ASC    
 
 
 6 Identificadores
