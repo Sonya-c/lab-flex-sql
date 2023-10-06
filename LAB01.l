@@ -108,7 +108,7 @@ SEMICOLON ";"
 ASIG "="
 
 /* Caracteres especiales: asterisco (*) */
-AST "*"
+AST [^0-9]"*"[^0-9]
 
 /* Identificadores: Nombres de tablas y columnas */
 DIGIT [0-9]
@@ -119,7 +119,7 @@ ID {ALPHA}({ALPHA}|{DIGIT})*
 /* Números: entero o decimal */
 NUM {INTEGER}|{DECIMAL}
 INTEGER {DIGIT}+
-DECIMAL {INTEGER}.{INTEGER}
+DECIMAL {INTEGER}"\."{INTEGER}
 
 /* Cadenas: entre comillas ’ (no son variables o indetificadores) */
 STRING \'[^\']*\'|\"[^\"]*\"
