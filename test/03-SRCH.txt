@@ -1,4 +1,5 @@
-SELECT *|identificador[,identificador,…] FROM identificador ;
-✓ SELECT Función(identificador) FROM identificador ;
-✓ SELECT Función(identificador)|identificador[,Función(identificador)|identificador,…] ] FROM
-identificador ;
+SELECT * FROM tabla1;
+SELECT var1, var2, var2 FROM tabla2;
+SELECT Max(*) FROM TABLA1;
+SELECT Min(var1) FROM TABLA1;
+SELECT var1, MAX(var1), min(var1) FROM tabla2;

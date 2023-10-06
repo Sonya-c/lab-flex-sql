@@ -1,2 +1,2 @@
-CREATE  tabla1(var1 VARCHAR(20), var2 INTEGER, var3 DECIMAL(2))
+CREATE tabla1(var1 VARCHAR(20), var2 INTEGER, var3 DECIMAL(2))
 DROP table tabla1;

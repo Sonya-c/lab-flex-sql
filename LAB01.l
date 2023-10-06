@@ -36,8 +36,6 @@
 
 /** GRAMATICA **/
 
-WS " "
-
 /*----- COMANDOS -------*/
 COMMAND {CREATE}|{DROP}|{SEARCH}|{MANIPULATION}|{FUNCTION}|{RESERVED}|{TABLE}
 
@@ -89,7 +87,7 @@ TYPE_VARCHAR [vV][aA][rR][cC][hH][aA][rR]
 */
 OP_ADD "+"
 OP_SUB "-"
-OP_MULT "*"
+/*OP_MULT "*"*/
 OP_DIV "/"
 OP_EQ "=="
 OP_DIFF "<>"
@@ -117,15 +115,15 @@ ALPHA [a-zA-Z]|{ACCENT}
 ID {ALPHA}({ALPHA}|{DIGIT})*
 
 /* Números: entero o decimal */
-NUM {INTEGER}|{DECIMAL}
 INTEGER {DIGIT}+
-DECIMAL {INTEGER}"\."{INTEGER}
+DECIMAL {INTEGER}?"\."{INTEGER}|{INTEGER}"\."{INTEGER}?
 
 /* Cadenas: entre comillas ’ (no son variables o indetificadores) */
 STRING \'[^\']*\'|\"[^\"]*\"
 
-ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
-
+ERROR {INTEGER_ERROR}|{DECIMAL_ERROR}
+INTEGER_ERROR {INTEGER}{ALPHA}+({INTEGER}|{ALPHA})*
+DECIMAL_ERROR {INTEGER_ERROR}"\."{INTEGER}|{INTEGER}"\."{INTEGER_ERROR}|{INTEGER_ERROR}"\."{INTEGER_ERROR}
 %%
 \n|" "|\t {printf("%s", yytext);}
 
@@ -135,7 +133,6 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 {OP_ADD} {printf(" suma=%s ", yytext);}
 {OP_SUB} {printf(" resta=%s ", yytext);}
-{OP_MULT} {printf(" mult=%s ", yytext);}
 {OP_DIV} {printf(" div=%s ", yytext);}
 {OP_EQ} {printf(" igual=%s ", yytext);}
 {OP_DIFF} {printf(" dife=%s ", yytext);}
@@ -155,7 +152,7 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 {AST} {printf(" asterisco=%s", yytext);}
 
 {ERROR} {
-    printf("ERROR: %s ", yytext);
+    printf("ERROR=%s ", yytext);
     num_errors++;
 }
 
@@ -171,7 +168,7 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 {STRING} {printf("cadena=%s", yytext);}
 
-{INTEGER} {printf("entero=%s", yytext);}
+{INTEGER} {printf("entero=%s" yytext);}
 {DECIMAL} {printf("decimal=%s", yytext);}
 
 
