@@ -108,7 +108,7 @@ SEMICOLON ";"
 ASIG "="
 
 /* Caracteres especiales: asterisco (*) */
-AST [^0-9]"*"[^0-9]
+AST "*"
 
 /* Identificadores: Nombres de tablas y columnas */
 DIGIT [0-9]
@@ -127,7 +127,7 @@ STRING \'[^\']*\'|\"[^\"]*\"
 ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 
 %%
-{WS}+ {printf(" ");}
+\n|" "|\t {printf("%s", yytext);}
 
 {COMMAND}|{TYPE} {
     printf("%s", toUpper(yytext));
@@ -152,7 +152,7 @@ ERROR {DIGIT}+{ALPHA}+({DIGIT}|{ALPHA})*
 {SEMICOLON} {printf(" puntcoma=%s", yytext);}
 {ASIG} {printf(" asign=%s ", yytext);}
 
-[^({NUM}|{PARACLOSE})]{AST}[^({NUM}|{PARAOPEN})] {printf(" asterisco=%s", yytext);}
+{AST} {printf(" asterisco=%s", yytext);}
 
 {ERROR} {
     printf("ERROR: %s ", yytext);
